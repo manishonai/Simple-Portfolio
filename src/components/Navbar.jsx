@@ -11,7 +11,7 @@ const Navbar = ({ isMenuOpen, setIsMenuOpen }) => {
     { name: 'Contact', href: 'contact' },
   ];
 
-  const resumeLink = "https://drive.google.com/file/d/1Bu1w9vWPgZblH4iEg8qAuaz1ArlxwVAQ/view?usp=sharing";
+  const resumeLink = "https://drive.google.com/file/d/1-HNqli0m5QTL4WpGQWKPlLPB91TyzNeO/view?usp=sharing";
 
   return (
     <nav className="fixed w-full bg-primary/90 backdrop-blur-sm z-50 py-4 px-6 shadow-lg">
