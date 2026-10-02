@@ -1,236 +1,109 @@
-import { motion } from 'framer-motion';
-import { FiGithub, FiLinkedin, FiMail, FiTwitter, FiMessageSquare, FiLink, FiFileText } from 'react-icons/fi';
+import { FaGithub, FaLinkedinIn, FaTelegram, FaXTwitter } from 'react-icons/fa6';
+import { FiArrowRight, FiFileText, FiLink, FiMail } from 'react-icons/fi';
+import { EMAIL, RESUME_URL } from '../links';
+import { useEffect, useRef } from 'react';
+import { animate, motion, useInView, useMotionValue, useReducedMotion, useTransform } from 'framer-motion';
+import { Reveal, Words } from './ui';
 
-const Hero = () => {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.3,
-      },
-    },
-  };
+const socials = [
+  { icon: FaGithub, link: 'https://github.com/manish2889', label: 'GitHub' },
+  { icon: FaLinkedinIn, link: 'https://www.linkedin.com/in/manishgowda', label: 'LinkedIn' },
+  { icon: FiMail, link: `mailto:${EMAIL}`, label: 'Email' },
+  { icon: FaXTwitter, link: 'https://x.com/0xmanishr', label: 'X' },
+  { icon: FaTelegram, link: 'https://telegram.dog/Oxmanishr', label: 'Telegram' },
+  { icon: FiLink, link: 'https://linktr.ee/manishrgowda', label: 'All links' },
+];
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-      },
-    },
-  };
+const stats = [
+  { value: '3+', label: 'years shipping LLM systems' },
+  { value: '25%', label: 'faster room turnover' },
+  { value: '90%', label: 'less deployment downtime' },
+  { value: '<200ms', label: 'semantic retrieval' },
+];
 
-  const socialVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: (i) => ({
-      opacity: 1,
-      x: 0,
-      transition: {
-        delay: 1.2 + (i * 0.1),
-        duration: 0.5,
-      },
-    }),
-  };
+// Counts the numeric part of a stat like "<200ms" up from zero when it scrolls into view.
+const CountUp = ({ value }) => {
+  const [, prefix, number, suffix] = value.match(/^(\D*)(\d+)(.*)$/);
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true });
+  const reduceMotion = useReducedMotion();
+  const count = useMotionValue(reduceMotion ? Number(number) : 0);
+  const rounded = useTransform(count, Math.round);
 
-  // Typing animation text variants
-  const textVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.08,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const letterVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.3,
-      }
-    },
-  };
-
-  const AnimatedText = ({ text, className }) => (
-    <motion.div
-      variants={textVariants}
-      className={className}
-    >
-      {text.split('').map((char, index) => (
-        <motion.span
-          key={index}
-          variants={letterVariants}
-          className={`inline-block ${char === ' ' ? 'mr-2' : ''}`}
-        >
-          {char}
-        </motion.span>
-      ))}
-    </motion.div>
-  );
-
-  const resumeLink = "https://drive.google.com/file/d/1oe6xjHBbo5vv6LzltoiJqqCac43snihq/view?usp=sharing";
+  useEffect(() => {
+    if (!inView || reduceMotion) return;
+    const controls = animate(count, Number(number), { duration: 1.4, ease: [0.16, 1, 0.3, 1] });
+    return () => controls.stop();
+  }, [inView, reduceMotion, count, number]);
 
   return (
-    <section className="min-h-screen flex items-center justify-center py-16 sm:py-32 relative overflow-hidden">
-      {/* Animated background shapes */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            rotate: [0, 180, 360],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-          className="absolute -right-1/4 top-1/4 w-96 h-96 bg-highlight/5 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{
-            scale: [1, 1.3, 1],
-            rotate: [360, 180, 0],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-          className="absolute -left-1/4 bottom-1/4 w-96 h-96 bg-highlight/5 rounded-full blur-3xl"
-        />
-      </div>
-
-      {/* Background gradient effect */}
-      <div className="absolute inset-0 bg-gradient-to-b from-primary via-secondary to-primary opacity-50" />
-      
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="max-w-4xl mx-auto"
-        >
-          <motion.div
-            variants={itemVariants}
-            className="mb-8 flex items-center gap-4"
-          >
-            <motion.a
-              href="https://linktr.ee/manishrgowda"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-highlight/10 text-highlight rounded-full hover:bg-highlight/20 transition-all duration-300 transform hover:scale-105"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <FiLink className="text-sm animate-pulse" />
-              <span className="text-sm font-mono">All Links</span>
-            </motion.a>
-            <motion.a
-              href={resumeLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-highlight/10 text-highlight rounded-full hover:bg-highlight/20 transition-all duration-300 transform hover:scale-105"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <FiFileText className="text-sm animate-pulse" />
-              <span className="text-sm font-mono">Resume</span>
-            </motion.a>
-          </motion.div>
-
-          <AnimatedText
-            text="Hi, my name is"
-            className="text-highlight font-mono mb-4"
-          />
-
-          <AnimatedText
-            text="Manish R"
-            className="text-4xl sm:text-6xl font-bold mb-4 text-textPrimary"
-          />
-
-          <AnimatedText
-            text="I build things for Web3"
-            className="text-3xl sm:text-5xl font-bold text-textSecondary mb-6 bg-gradient-to-r from-highlight/80 to-highlight/40 bg-clip-text text-transparent whitespace-normal break-words leading-normal sm:leading-normal px-2 sm:px-0"
-          />
-
-          <motion.p
-            variants={itemVariants}
-            className="text-textSecondary max-w-2xl text-lg mb-8 leading-relaxed"
-          >
-            I'm a blockchain developer and computer science student at PES College of Engineering. 
-            Currently, I'm focused on learning and building decentralized applications, exploring 
-            Solana development, and working on AI projects with Eliza.
-          </motion.p>
-
-          <motion.div 
-            className="flex flex-wrap gap-4 justify-center sm:justify-start"
-            variants={containerVariants}
-          >
-            <motion.a
-              href={resumeLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              custom={-1}
-              variants={socialVariants}
-              className="flex items-center gap-2 px-6 py-3 bg-highlight text-primary rounded-lg hover:bg-highlight/90 transition-all duration-300 font-semibold"
-              whileHover={{ 
-                scale: 1.05,
-                boxShadow: '0 0 20px rgba(100, 255, 218, 0.3)'
-              }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <FiFileText className="text-xl" />
-              View Resume
-            </motion.a>
-            {[
-              { icon: FiGithub, link: "https://github.com/manish2889", label: "GitHub" },
-              { icon: FiLinkedin, link: "https://www.linkedin.com/in/manishgowda", label: "LinkedIn" },
-              { icon: FiMail, link: "mailto:manishr9844@gmail.com", label: "Email" },
-              { icon: FiTwitter, link: "https://x.com/0xmanishr", label: "Twitter/X" },
-              { icon: FiMessageSquare, link: "https://telegram.dog/Oxmanishr", label: "Telegram" }
-            ].map(({ icon: Icon, link, label }, i) => (
-              <motion.a
-                key={label}
-                href={link}
-                target="_blank"
-                rel="noopener noreferrer"
-                custom={i}
-                variants={socialVariants}
-                className="flex items-center gap-2 px-6 py-3 bg-transparent border-2 border-highlight text-highlight rounded-lg hover:bg-highlight/10 transition-all duration-300"
-                whileHover={{ 
-                  scale: 1.05,
-                  boxShadow: '0 0 20px rgba(100, 255, 218, 0.2)'
-                }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Icon className="text-xl" />
-                {label}
-              </motion.a>
-            ))}
-          </motion.div>
-        </motion.div>
-      </div>
-
-      {/* Decorative elements */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.1 }}
-        transition={{ delay: 1.5, duration: 1 }}
-        className="absolute inset-0 overflow-hidden pointer-events-none"
-      >
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-highlight rounded-full filter blur-3xl opacity-20 animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-highlight rounded-full filter blur-3xl opacity-20 animate-pulse delay-1000" />
-      </motion.div>
-    </section>
+    <span ref={ref}>
+      {prefix}
+      <motion.span>{rounded}</motion.span>
+      {suffix}
+    </span>
   );
 };
 
-export default Hero; 
+const Hero = () => (
+  <section className="pb-16 pt-36 sm:pb-24 sm:pt-48">
+    <Reveal as="p" className="glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm text-muted">
+      <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399] motion-safe:animate-pulse" />
+      Applied AI Engineer · Bengaluru, India
+    </Reveal>
+
+    <h1 className="mt-8 text-5xl font-semibold tracking-tight sm:text-7xl">
+      <Words text="Manish R" delay={0.1} />
+    </h1>
+
+    <Reveal delay={0.2}>
+      <p className="mt-3 text-3xl font-semibold tracking-tight text-sheen sm:text-5xl sm:leading-tight">
+        I build production AI systems.
+      </p>
+      <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted">
+        I build LLM systems end to end: multi-agent orchestration with LangGraph, RAG pipelines, knowledge
+        graphs, evaluation, and deployment on Python/FastAPI backends and React/Next.js frontends.
+      </p>
+    </Reveal>
+
+    <div className="mt-10 flex flex-wrap items-center gap-3">
+      <Reveal as="a" delay={0.3} href={RESUME_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">
+        <FiFileText />
+        View Resume
+      </Reveal>
+      <Reveal as="a" delay={0.35} href="#contact" className="btn-glass group">
+        Get in touch
+        <FiArrowRight className="transition-transform group-hover:translate-x-1" />
+      </Reveal>
+      <ul className="flex flex-wrap gap-2 sm:ml-2">
+        {socials.map(({ icon: Icon, link, label }, i) => (
+          <li key={label}>
+            <Reveal
+              as="a"
+              delay={0.4 + i * 0.04}
+              href={link}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={label}
+              title={label}
+              className="btn-icon"
+            >
+              <Icon />
+            </Reveal>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div className="mt-16 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+      {stats.map(({ value, label }, i) => (
+        <Reveal key={label} delay={0.5} index={i} className="glass spotlight rounded-3xl p-5">
+          <p className="text-3xl font-semibold tracking-tight text-sheen tabular-nums"><CountUp value={value} /></p>
+          <p className="mt-1 text-sm text-muted">{label}</p>
+        </Reveal>
+      ))}
+    </div>
+  </section>
+);
+
+export default Hero;

@@ -18,7 +18,6 @@ A sleek, responsive portfolio website built with React, Vite, and Tailwind CSS. 
 - Tailwind CSS 3
 - Framer Motion
 - React Icons
-- React Scroll
 
 ## 📦 Installation
 

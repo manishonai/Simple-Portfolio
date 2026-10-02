@@ -1,239 +1,89 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { FiGithub, FiExternalLink, FiFolder } from 'react-icons/fi';
+import { FiArrowUpRight, FiGithub } from 'react-icons/fi';
+import { Chips, Reveal, Section } from './ui';
 
+// `label` marks client work under NDA, which has no public links.
 const projects = [
   {
-    title: "AQI Dashboard",
-    description: "A real-time air quality monitoring dashboard built with React that provides comprehensive environmental data visualization and analysis. Features include real-time AQI monitoring, interactive map visualization, multiple data layers, AI-powered chatbot assistant, and PWA support.",
-    tech: ["React 18", "Tailwind CSS", "Leaflet Maps", "Vite", "PWA", "OpenStreetMap API"],
+    title: "Multi-Agent AI Due Diligence Platform",
+    label: "Client Project (NDA)",
+    description: "Primary engineer on a multi-agent LLM platform that turns a single company name into an auditable, source-grounded due diligence recommendation. A LangGraph state machine runs discovery, validation, analysis, and synthesis with specialist scoring agents and a multi-persona council that debates findings, on a FastAPI microservice backend with SSE progress streaming, a knowledge graph, vector retrieval, and per-service fault isolation. Every result carries data lineage and claim grounding, guarded by blocking LLM eval gates and 290+ test files across Pytest, Vitest, and Playwright.",
+    tech: ["Python", "FastAPI", "LangGraph", "LangSmith", "LiteLLM", "PostgreSQL", "Memgraph", "Qdrant", "Redis", "Next.js", "TypeScript", "Docker"],
+  },
+  {
+    title: "Bitcoin Self-Custody Vault Wallet",
+    label: "Client Project (NDA)",
+    description: "Sole engineer of a cross-browser Manifest V3 wallet extension for Bitcoin self-custody vaults with Taproot Schnorr signing and Bitcoin Layer-2 support. Key management is hardened with AES-GCM under PBKDF2-SHA256, and a secure dApp provider API adds site allow-listing, nonce replay protection, fee caps, and a popup-only approval queue. Also built a testnet faucet with HD-wallet UTXO management and shipped 1,900+ automated tests across 32K+ lines of TypeScript.",
+    tech: ["TypeScript", "React", "WXT (Manifest V3)", "bitcoinjs-lib", "Web Crypto API", "Cloudflare Workers", "Vitest", "Playwright"],
+  },
+  {
+    title: "AI Memory Protocol",
+    description: "A persistent, local-first knowledge layer that keeps user preferences and history searchable across siloed AI platforms like ChatGPT, Claude, and Gemini. Episodic and semantic memory built on LangMem SDK and LangGraph Store delivers semantic retrieval under 200ms across 10,000+ entries and a 40% reduction in manual context re-entry, with pay-per-use storage via the x402 protocol and ERC-8004.",
+    tech: ["Python", "LangChain", "LangGraph", "ChromaDB", "Redis", "SQLite", "TypeScript"],
+  },
+  {
+    title: "AI-Powered DevOps Console & CLI",
+    description: "An autonomous code-to-production deployment engine with integrated security scanning and self-healing infrastructure for a Silicon Valley technology firm. Go CLI tooling orchestrates deployments across GKE clusters with Terraform-managed infrastructure, cutting deployment-related downtime by 90% and moving the client from bi-weekly to daily releases, with Snyk and Trivy baked into every SOC2-aligned deployment gate.",
+    tech: ["Go", "Docker", "GitHub Actions", "GitLab CI", "Snyk", "Trivy", "Prometheus", "Grafana", "GKE", "Terraform"],
+  },
+  {
+    title: "L2GPT: Bitcoin L2 RAG Chatbot",
+    description: "A RAG chatbot giving accurate, context-aware answers across Bitcoin Layer 2 solutions and scaling technologies, using LangChain with FAISS vector retrieval, Claude Sonnet 3.5 for generation, and an interactive Streamlit interface.",
+    tech: ["Python", "LangChain", "FAISS", "Claude Sonnet 3.5", "Streamlit"],
+  },
+  {
+    title: "Stealth Market-Maker Agent (DeFAI)",
+    description: "An AI-orchestrated batching layer for prediction markets that eliminates front-running and alpha leakage through off-chain aggregation and ZK-shielded settlement. LangGraph drives multi-step agent orchestration with GPT-4 market intelligence, settling through Anchor smart contracts on Solana with MagicBlock ER.",
+    tech: ["Next.js 15", "TypeScript", "Python", "FastAPI", "LangGraph", "Anchor (Rust)", "Helius RPC"],
+  },
+  {
+    title: "AI Travel Planner",
+    description: "An intelligent travel planning system built on LangChain RAG pipelines and FAISS semantic search, with the ELK Stack for logging and analytics, deployed as containers on GCP with Kubernetes and an automated CI/CD pipeline.",
+    tech: ["Python", "LangChain", "FAISS", "ELK Stack", "Groq API", "Streamlit", "Docker", "GCP", "Kubernetes"],
+  },
+  {
+    title: "IoT Air Quality & Decentralized Climate Infrastructure",
+    description: "A decentralized climate tech stack monitoring air quality through ESP32 devices, processing 2.6M data points per month with an incentivization layer for data contributors. Readings land in an immutable IPFS data layer, with pay-as-you-go access via the x402 protocol and ERC-8004, visualized on a real-time AQI dashboard.",
+    tech: ["ESP32 (Embedded C)", "IPFS", "React", "Leaflet", "x402 Protocol", "ERC-8004"],
     github: "https://github.com/aqihub/aqi-dashboard",
     external: "https://dashboard.aqi.co.in/",
-    isComingSoon: false
   },
-  {
-    title: "Vide Digital Technologies Website",
-    description: "A modern, responsive corporate website built with React, TypeScript, and Vite for a global digital marketing and technology solutions provider. Features sophisticated animations, SEO optimization, and comprehensive digital service offerings.",
-    tech: ["React 18", "TypeScript", "Vite", "Tailwind CSS", "Framer Motion"],
-    github: "https://github.com/Vide-Digital-Technologies/VideDigitalTechnologies-Website",
-    external: "https://vide-digital.netlify.app/",
-    isComingSoon: false
-  },
-  {
-    title: "Decentralized AI-Powered Prediction Market",
-    description: "A blockchain-based prediction market platform that combines DeFi with AI-powered analysis for cryptocurrency price predictions. Features smart contract-based markets, Chainlink oracles, and automated reward distribution.",
-    tech: ["React.js", "Solidity", "Web3.js", "Chainlink", "Tailwind CSS"],
-    github: "https://github.com/manish2889/decentralized-prediction-market",
-    external: "https://decentralized-prediction-market.vercel.app/",
-    isComingSoon: false
-  },
-  {
-    title: "EtherTrendAI: Gas Price Predictor",
-    description: "A React-based web application that leverages AI technology to predict Ethereum gas prices, helping users optimize their transaction timing and costs on the Ethereum network.",
-    tech: ["React.js", "Chart.js", "Etherscan API", "Tailwind CSS", "AI Prediction Engine"],
-    github: "https://github.com/manish2889/ethertrendai-gas-predictor",
-    external: "https://ethertrendai-gas-predictor.vercel.app/",
-    isComingSoon: false
-  },
-  {
-    title: "Web3 Chatbot",
-    description: "A React-based chatbot application that integrates with LLaMA AI to provide intelligent responses to Web3 and blockchain-related queries. Features real-time chat interface with AI integration and dynamic message formatting.",
-    tech: ["React 18", "LLaMA AI", "Tailwind CSS", "Custom Hooks"],
-    github: "https://github.com/manish2889/web3-chatbot",
-    external: "https://web3-chatbot.vercel.app/",
-    isComingSoon: false
-  },
-  {
-    title: "TokenPulseAI: DeFi Token Price Predictor",
-    description: "An AI-powered DeFi analytics platform that provides real-time price predictions and market sentiment analysis for popular DeFi tokens, built with React and integrated with the LLaMA AI model.",
-    tech: ["React.js", "Chart.js", "LLaMA AI", "Express.js", "Tailwind CSS"],
-    github: "https://github.com/manish2889/tokenpulse-ai",
-    external: "https://tokenpulse-ai.vercel.app/",
-    isComingSoon: false
-  },
-  {
-    title: "Ethereum Block Analyzer with AI Integration",
-    description: "A Next.js-based web application that combines Ethereum blockchain data analysis with AI insights, providing detailed transaction analysis and intelligent interpretations of blockchain activity.",
-    tech: ["Next.js 14", "React 18", "Etherscan API", "Gaia AI API", "Tailwind CSS"],
-    github: "https://github.com/manish2889/gaia-etherscan-ai-project",
-    external: "https://gaia-etherscan-ai-project.vercel.app/",
-    isComingSoon: false
-  },
-  {
-    title: "TokenTap: Web3 Token Faucet Interface",
-    description: "A React-based web application that provides a user-friendly interface for interacting with an Ethereum token faucet smart contract, allowing users to request and manage test tokens on the blockchain.",
-    tech: ["React 18", "Ethers.js", "MetaMask", "Smart Contracts", "CSS Animations"],
-    github: "https://github.com/manish2889/tokentap",
-    external: "https://tokentap.vercel.app/",
-    isComingSoon: false
-  }
 ];
 
-const Projects = () => {
-  const { scrollYProgress } = useScroll();
-  const opacity = useTransform(scrollYProgress, [0.3, 0.4, 0.5], [0, 0.5, 1]);
-  const scale = useTransform(scrollYProgress, [0.3, 0.4], [0.8, 1]);
+const linkClass = 'grid h-9 w-9 place-items-center rounded-full border border-fg/10 text-muted transition hover:bg-fg/10 hover:text-fg';
 
-  const titleVariants = {
-    hidden: { opacity: 0, x: -50 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        type: "spring",
-        stiffness: 200,
-        damping: 20
-      }
-    }
-  };
-
-  const projectVariants = {
-    hidden: { 
-      opacity: 0,
-      y: 30,
-      scale: 0.9,
-      filter: "blur(10px)"
-    },
-    visible: index => ({
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      filter: "blur(0px)",
-      transition: {
-        type: "spring",
-        damping: 20,
-        stiffness: 100,
-        delay: index * 0.1
-      }
-    })
-  };
-
-  return (
-    <section id="projects" className="py-20 relative overflow-hidden">
-      {/* Animated grid background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 2px 2px, ${`rgba(100, 255, 218, 0.15)`} 1px, transparent 0)`,
-          backgroundSize: '40px 40px',
-        }}>
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-b from-primary via-transparent to-primary"
-            animate={{
-              opacity: [1, 0.5, 1],
-            }}
-            transition={{
-              duration: 5,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-          />
-        </div>
-      </div>
-
-      <motion.div 
-        style={{ opacity, scale }}
-        className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
-      >
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="max-w-4xl mx-auto"
+const Projects = () => (
+  <Section id="projects" eyebrow="04 / Projects" title="Selected work">
+    <div className="grid gap-4 md:grid-cols-2">
+      {projects.map((project, i) => (
+        <Reveal
+          key={project.title}
+          index={i % 2}
+          className="glass spotlight flex flex-col rounded-3xl p-6 sm:p-8"
         >
-          <div className="relative mb-16">
-            <motion.div 
-              variants={titleVariants}
-              className="flex items-center gap-4"
-            >
-              <span className="text-highlight font-mono text-lg">03.</span>
-              <h2 className="text-4xl font-bold text-[#ccd6f6]">
-                Featured Projects
-              </h2>
-            </motion.div>
-            <motion.div
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="absolute -bottom-4 left-0 right-0 h-px bg-gradient-to-r from-highlight via-highlight/50 to-transparent"
-            />
+          <div className="flex items-start justify-between gap-4">
+            <h3 className="text-lg font-semibold tracking-tight">{project.title}</h3>
+            <div className="flex shrink-0 gap-2">
+              {project.label && <span className="chip whitespace-nowrap">{project.label}</span>}
+              {project.github && (
+                <a href={project.github} target="_blank" rel="noopener noreferrer" aria-label={`${project.title} on GitHub`} className={linkClass}>
+                  <FiGithub />
+                </a>
+              )}
+              {project.external && (
+                <a href={project.external} target="_blank" rel="noopener noreferrer" aria-label={`${project.title} live site`} className={linkClass}>
+                  <FiArrowUpRight />
+                </a>
+              )}
+            </div>
           </div>
-
-          <div className="grid gap-8">
-            {projects.map((project, index) => (
-              <motion.div
-                key={index}
-                custom={index}
-                variants={projectVariants}
-                whileHover={{ 
-                  scale: 1.02,
-                  y: -5,
-                }}
-                className="group relative bg-[#112240] p-6 sm:p-8 rounded-xl shadow-lg overflow-hidden transform-gpu border border-highlight/10 hover:border-highlight/30 transition-all duration-300"
-              >
-                {/* Project card background effects */}
-                <div className="absolute inset-0 bg-gradient-to-br from-highlight/5 via-transparent to-highlight/5 opacity-50" />
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-20 bg-gradient-to-r from-highlight/20 to-transparent transition-opacity duration-300" />
-
-                <div className="relative z-10">
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
-                    <div className="flex items-center gap-4">
-                      <div className="p-2 rounded-lg bg-highlight/10">
-                        <FiFolder className="text-2xl text-highlight" />
-                      </div>
-                      <h3 className="text-xl sm:text-2xl font-bold text-[#ccd6f6] group-hover:text-highlight transition-colors duration-300">
-                        {project.title}
-                      </h3>
-                    </div>
-                    <div className="flex-grow" />
-                    <div className="flex gap-4 mt-2 sm:mt-0">
-                      <motion.a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        whileHover={{ scale: 1.2, rotate: 360 }}
-                        transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                        className="p-2 rounded-lg bg-highlight/5 hover:bg-highlight/10 transition-colors duration-300"
-                      >
-                        <FiGithub className="w-5 h-5 text-[#ccd6f6] hover:text-highlight transition-colors" />
-                      </motion.a>
-                      <motion.a
-                        href={project.external}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        whileHover={{ scale: 1.2, rotate: 360 }}
-                        transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                        className="p-2 rounded-lg bg-highlight/5 hover:bg-highlight/10 transition-colors duration-300"
-                      >
-                        <FiExternalLink className="w-5 h-5 text-[#ccd6f6] hover:text-highlight transition-colors" />
-                      </motion.a>
-                    </div>
-                  </div>
-
-                  <p className="text-[#a8b2d1] text-base sm:text-lg mb-6 leading-relaxed font-medium">
-                    {project.description}
-                  </p>
-
-                  <div className="flex flex-wrap gap-2 sm:gap-3">
-                    {project.tech.map((tech, i) => (
-                      <motion.span
-                        key={i}
-                        whileHover={{ 
-                          scale: 1.05,
-                          y: -2,
-                        }}
-                        className="text-[#ccd6f6] text-xs sm:text-sm font-mono px-3 py-1.5 rounded-full bg-highlight/5 border border-highlight/20 hover:border-highlight/40 hover:bg-highlight/10 transition-all duration-300"
-                      >
-                        {tech}
-                      </motion.span>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+          <p className="mb-6 mt-4 leading-relaxed text-muted">{project.description}</p>
+          <div className="mt-auto">
+            <Chips items={project.tech} />
           </div>
-        </motion.div>
-      </motion.div>
-    </section>
-  );
-};
+        </Reveal>
+      ))}
+    </div>
+  </Section>
+);
 
 export default Projects;
