@@ -13,7 +13,7 @@ const Contact = () => (
         want to say hi, I&apos;ll get back to you.
       </p>
       <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-        <a href="https://calendly.com/manishr2889/30min" target="_blank" rel="noopener noreferrer" className="btn-primary">
+        <a href="https://calendly.com/manishonai" target="_blank" rel="noopener noreferrer" className="btn-primary">
           <FiCalendar />
           Schedule a meeting
         </a>
