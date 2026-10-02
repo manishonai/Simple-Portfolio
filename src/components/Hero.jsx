@@ -6,12 +6,12 @@ import { animate, motion, useInView, useMotionValue, useReducedMotion, useTransf
 import { Reveal, Words } from './ui';
 
 const socials = [
-  { icon: FaGithub, link: 'https://github.com/manish2889', label: 'GitHub' },
-  { icon: FaLinkedinIn, link: 'https://www.linkedin.com/in/manishgowda', label: 'LinkedIn' },
+  { icon: FaGithub, link: 'https://github.com/manishonai', label: 'GitHub' },
+  { icon: FaLinkedinIn, link: 'https://www.linkedin.com/in/manishonai', label: 'LinkedIn' },
   { icon: FiMail, link: `mailto:${EMAIL}`, label: 'Email' },
-  { icon: FaXTwitter, link: 'https://x.com/0xmanishr', label: 'X' },
-  { icon: FaTelegram, link: 'https://telegram.dog/Oxmanishr', label: 'Telegram' },
-  { icon: FiLink, link: 'https://linktr.ee/manishrgowda', label: 'All links' },
+  { icon: FaXTwitter, link: 'https://x.com/manishonai', label: 'X' },
+  { icon: FaTelegram, link: 'https://telegram.dog/manishonai', label: 'Telegram' },
+  { icon: FiLink, link: 'https://linktr.ee/manishonai', label: 'All links' },
 ];
 
 const stats = [
